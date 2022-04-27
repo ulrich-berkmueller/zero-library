@@ -7,7 +7,7 @@ use Gwa\Wordpress\Zero\Theme\AbstractTheme;
 use Gwa\Wordpress\Zero\Timber\Traits\TimberBridgeTrait;
 use Gwa\Wordpress\Zero\Traits\HasTheme;
 use LogicException;
-use TimberLoader as Loader;
+use Timber\Loader;
 
 abstract class AbstractController
 {
@@ -85,7 +85,7 @@ abstract class AbstractController
      * @param string $postClass
      * @return array|boolean|null
      */
-    public function getPost($postClass = '\TimberPost')
+    public function getPost($postClass = \Timber\Post::class)
     {
         return $this->getPostForArgs(false, $postClass);
     }
@@ -96,7 +96,7 @@ abstract class AbstractController
      *
      * @return array|boolean|null
      */
-    public function getPostForArgs($args, $postClass = '\TimberPost')
+    public function getPostForArgs($args, $postClass = \Timber\Post::class)
     {
         return $this->getTimberBridge()->getPost($args, $postClass);
     }
@@ -107,7 +107,7 @@ abstract class AbstractController
      *
      * @return array|boolean|null
      */
-    public function getPosts($postClass = '\TimberPost', $collection = false)
+    public function getPosts($postClass = \Timber\Post::class, $collection = false)
     {
         return $this->getPostsForArgs(false, $postClass, $collection);
     }
@@ -119,7 +119,7 @@ abstract class AbstractController
      *
      * @return array|boolean|null
      */
-    public function getPostsForArgs($args, $postClass = '\TimberPost', $collection = false)
+    public function getPostsForArgs($args, $postClass = \Timber\Post::class, $collection = false)
     {
         return $this->getTimberBridge()->getPosts($args, $postClass, $collection);
     }

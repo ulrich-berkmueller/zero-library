@@ -1,7 +1,9 @@
 <?php
 namespace Gwa\Wordpress\Zero\Timber;
 
+use Gwa\Wordpress\Zero\Helper\ErrorReportingHelper;
 use Gwa\Wordpress\Zero\Timber\Contracts\TimberBridgeInterface;
+
 
 /**
  * @codeCoverageIgnore
@@ -15,7 +17,9 @@ class TimberBridge implements TimberBridgeInterface
      */
     public function __call($function, $args = [])
     {
-        return call_user_func_array('\Timber::' . $this->camelToUnderscore($function), $args);
+        return ErrorReportingHelper::runWithoutDeprecationWarnings(function() use ($function, $args) {
+            return call_user_func_array([\Timber\Timber::class, $this->camelToUnderscore($function)], $args);
+        });
     }
 
     /**

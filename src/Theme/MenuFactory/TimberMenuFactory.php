@@ -1,7 +1,8 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Theme\MenuFactory;
 
-use TimberMenu;
+use Timber\Menu;
 
 class TimberMenuFactory implements MenuFactoryContract
 {
@@ -12,6 +13,6 @@ class TimberMenuFactory implements MenuFactoryContract
      */
     public function create($slug)
     {
-        return new TimberMenu($slug);
+        return new Menu($slug);
     }
 }
