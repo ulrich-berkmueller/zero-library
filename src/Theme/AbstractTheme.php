@@ -121,7 +121,7 @@ abstract class AbstractTheme
         Timber::$locations = $path;
     }
 
-    final private function registerModules(array $moduleclasses, HookManager $hookmanager)
+    private function registerModules(array $moduleclasses, HookManager $hookmanager)
     {
         foreach ($moduleclasses as $key => $value) {
             if (is_numeric($key)) {
@@ -136,7 +136,7 @@ abstract class AbstractTheme
         }
     }
 
-    final private function initializeModule($moduleclass, array $settings, HookManager $hookmanager)
+    private function initializeModule($moduleclass, array $settings, HookManager $hookmanager)
     {
         $instance = new $moduleclass;
         $instance->init($this->getWpBridge(), $settings, $hookmanager);

@@ -106,7 +106,7 @@ abstract class AbstractThemeModule
 
     /* ---------------- */
 
-    final private function registerShortcodes(array $shortcodeclasses)
+    private function registerShortcodes(array $shortcodeclasses)
     {
         foreach ($shortcodeclasses as $shortcodeclass) {
             $instance = new $shortcodeclass;
