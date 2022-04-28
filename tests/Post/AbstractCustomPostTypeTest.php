@@ -1,9 +1,11 @@
 <?php
 namespace Gwa\Wordpress\Zero\Test\Post;
 
-class AbstractCustomPostTypeTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class AbstractCustomPostTypeTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $instance = new MyCustomPostType;
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Post\AbstractCustomPostType', $instance);

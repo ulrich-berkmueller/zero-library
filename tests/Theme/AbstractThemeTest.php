@@ -3,13 +3,14 @@ namespace Gwa\Wordpress\Zero\Test\Theme;
 
 use Gwa\Wordpress\Zero\Theme\MenuFactory\MockMenuFactory;
 use Gwa\Wordpress\WpBridge\MockeryWpBridge;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AbstractThemeTest extends \PHPUnit_Framework_TestCase
+class AbstractThemeTest extends MockeryTestCase
 {
     private $bridge;
     private $instance;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->bridge = new MockeryWpBridge;
         $this->instance = new MyTheme;
@@ -19,17 +20,17 @@ class AbstractThemeTest extends \PHPUnit_Framework_TestCase
 
     /* ---------------- */
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Theme\AbstractTheme', $this->instance);
     }
 
-    public function testGetEnvironment()
+    public function testGetEnvironment(): void
     {
         $this->assertEquals('production', $this->instance->getEnvironment());
     }
 
-    public function testDevelopmentEnvironmentNotIndexable()
+    public function testDevelopmentEnvironmentNotIndexable(): void
     {
         $bridge = new MockeryWpBridge;
 
@@ -44,17 +45,17 @@ class AbstractThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('pre_option_blog_public', $filters[1]->filtername);
     }
 
-    public function testGetTextDomain()
+    public function testGetTextDomain(): void
     {
         $this->assertEquals('mytheme', $this->instance->getTextDomain());
     }
 
-    public function testTranslation()
+    public function testTranslation(): void
     {
         $this->assertEquals('foo', $this->instance->__('foo'));
     }
 
-    public function testAddThemeLangSupport()
+    public function testAddThemeLangSupport(): void
     {
         $this->bridge->mock()
             ->shouldReceive('getTemplateDirectory')
@@ -67,7 +68,7 @@ class AbstractThemeTest extends \PHPUnit_Framework_TestCase
         $this->instance->addThemeLangSupport();
     }
 
-    public function testInit()
+    public function testInit(): void
     {
         $this->mockBridgeForInit();
         $this->instance->init();
@@ -75,23 +76,23 @@ class AbstractThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->instance->isinit);
     }
 
-    public function testGetContext()
+    public function testGetContext(): void
     {
         $this->mockBridgeForInit();
         $this->instance->init();
 
         $data = $this->instance->addToContext([]);
 
-        $this->assertInternalType('array', $data);
+        $this->assertIsArray($data);
     }
 
-    public function testGetDefaultMenuFactory()
+    public function testGetDefaultMenuFactory(): void
     {
         $this->instance = new MyTheme;
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Theme\MenuFactory\TimberMenuFactory', $this->instance->getMenuFactory());
     }
 
-    public function testCreateController()
+    public function testCreateController(): void
     {
         $controller = $this->instance->createController('Gwa\Wordpress\Zero\Test\Controller\MyController');
 

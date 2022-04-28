@@ -2,10 +2,11 @@
 namespace Gwa\Wordpress\Zero\Test\Theme;
 
 use Gwa\Wordpress\Zero\Theme\HookManager;
+use PHPUnit\Framework\TestCase;
 
-class HookManagerTest extends \PHPUnit_Framework_TestCase
+class HookManagerTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $instance = new HookManager;
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Theme\HookManager', $instance);

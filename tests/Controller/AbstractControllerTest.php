@@ -3,16 +3,17 @@ namespace Gwa\Wordpress\Zero\Test\Controller;
 
 use Gwa\Wordpress\Zero\Timber\MockeryTimberBridge;
 use Gwa\Wordpress\WpBridge\MockeryWpBridge;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AbstractControllerTest extends \PHPUnit_Framework_TestCase
+class AbstractControllerTest extends MockeryTestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $controller = new MyController;
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Controller\AbstractController', $controller);
     }
 
-    public function testCacheMode()
+    public function testCacheMode(): void
     {
         $controller = new MyController;
 
@@ -23,7 +24,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(60, $controller->getCacheExpiresSeconds());
     }
 
-    public function testGetPost()
+    public function testGetPost(): void
     {
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
@@ -37,7 +38,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
         $post = $controller->getPost();
     }
 
-    public function testGetPostForArgs()
+    public function testGetPostForArgs(): void
     {
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
@@ -51,7 +52,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
         $post = $controller->getPostForArgs(['foo' => 'bar'], '\MyPostClass');
     }
 
-    public function testGetPosts()
+    public function testGetPosts(): void
     {
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
@@ -65,7 +66,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
         $post = $controller->getPosts();
     }
 
-    public function testGetPostsForArgs()
+    public function testGetPostsForArgs(): void
     {
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
@@ -79,7 +80,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
         $post = $controller->getPostsForArgs(['foo' => 'bar'], '\MyPostClass', 'collection');
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bridge = new MockeryTimberBridge();
         $bridge->mock()

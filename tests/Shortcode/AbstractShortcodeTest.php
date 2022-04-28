@@ -2,10 +2,11 @@
 namespace Gwa\Wordpress\Zero\Test\Shortcode;
 
 use Gwa\Wordpress\WpBridge\MockeryWpBridge;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AbstractModuleTest extends \PHPUnit_Framework_TestCase
+class AbstractModuleTest extends MockeryTestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $bridge = new MockeryWpBridge;
         $bridge->mock()
@@ -23,7 +24,7 @@ class AbstractModuleTest extends \PHPUnit_Framework_TestCase
         $output = $instance->render(['foo' => 'bar'], '');
     }
 
-    public function testGetIdsArray()
+    public function testGetIdsArray(): void
     {
         $instance = new MyShortcode;
         $ids = '1,2,4';
