@@ -9,13 +9,14 @@ class RootsSoil
      * @var array
      */
     protected $soilFunc = [
-        'soil-jquery-cdn'               => false,
-        'soil-clean-up'                 => true,
-        'soil-nav-walker'               => true,
-        'soil-relative-urls'            => true,
-        'soil-js-to-footer'             => true,
-        'soil-disable-trackbacks'       => true,
-        'soil-disable-asset-versioning' => true,
+        'clean-up'                 => true,
+        'disable-rest-api'         => false,
+        'disable-asset-versioning' => true,
+        'disable-trackbacks'       => true,
+        'js-to-footer'             => true,
+        'nav-walker'               => true,
+        'nice-search'              => true,
+        'relative-urls'            => true,
     ];
 
     protected $google = [
@@ -55,15 +56,15 @@ class RootsSoil
     public function init()
     {
         foreach ($this->soilFunc as $key => $value) {
-            if (is_bool($value) && $value === true) {
-                add_theme_support($key);
+            if ($value === true) {
+                add_theme_support('soil', $key);
             }
         }
 
         $google = $this->google;
 
         if (is_bool($google['boot']) && $google['boot'] === true) {
-            add_theme_support('soil-google-analytics', $google['user']);
+            add_theme_support('soil', ['google-analytics' => $google['user']]);
         }
     }
 }
