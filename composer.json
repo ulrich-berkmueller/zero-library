@@ -27,7 +27,7 @@
         "jjgrainger/wp-custom-post-type-class" : "^1.4",
         "timber/timber"                        : "^1.19",
         "cmb2/cmb2"                            : "^2.10",
-        "gwa/wp-bridge"                        : "^2.3",
+        "gwa/wp-bridge"                        : "dev-fix-php-8.1-compatiblity",
         "roots/soil"                           : "^4.0"
     },
     "require-dev": {
