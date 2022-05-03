@@ -49,7 +49,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-fix-php-8.1-compatiblity": "5.2-dev"
+            "dev-fix-php-8.1-compatiblity": "5.2.x-dev"
         }
     },
     "minimum-stability"                        : "dev",
