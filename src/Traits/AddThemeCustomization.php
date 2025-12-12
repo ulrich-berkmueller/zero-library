@@ -1,7 +1,6 @@
 <?php
-namespace Gwa\Wordpress\Zero\Traits;
 
-use WP_Customize_Control;
+namespace Gwa\Wordpress\Zero\Traits;
 
 /**
  * Add trait to a module to add control boxes and controls.
@@ -12,6 +11,12 @@ trait AddThemeCustomization
 
     private $isCustomizationInited = false;
 
+    public function customizeRegisterAction($wpcustomize)
+    {
+        $this->wpcustomize = $wpcustomize;
+        $this->customize();
+    }
+
     protected function initCustomization()
     {
         if (!$this->isCustomizationInited) {
@@ -20,36 +25,34 @@ trait AddThemeCustomization
         }
     }
 
-    public function customizeRegisterAction($wpcustomize)
-    {
-        $this->wpcustomize = $wpcustomize;
-        $this->customize();
-    }
-
     protected function addSection($name, array $options)
     {
         $this->wpcustomize->add_section($name, $options);
+
         return $this;
     }
 
     protected function addSetting($name, $options)
     {
         $this->wpcustomize->add_setting($name, $options);
+
         return $this;
     }
 
     protected function addControl($name, $options)
     {
         $this->wpcustomize->add_control(
-            new WP_Customize_Control(
+            new \WP_Customize_Control(
                 $this->wpcustomize,
                 $name,
                 $options
             )
         );
+
         return $this;
     }
 
     abstract protected function customize();
+
     abstract protected function getWpBridge();
 }

@@ -1,11 +1,17 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Module;
 
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
 use Gwa\Wordpress\Zero\Theme\HookManager;
-use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AbstractModuleTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -15,13 +21,13 @@ class AbstractModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bridge = new MockeryWpBridge;
-        $this->hookmanager = new HookManager;
+        $this->bridge = new MockeryWpBridge();
+        $this->hookmanager = new HookManager();
         $this->hookmanager->setWpBridge($this->bridge);
-        $this->instance = new MyModule;
+        $this->instance = new MyModule();
     }
 
-    /* ---------------- */
+    // ----------------
 
     public function testConstruct(): void
     {
@@ -30,7 +36,7 @@ class AbstractModuleTest extends TestCase
 
     public function testBasicModule(): void
     {
-        $module = new BasicModule;
+        $module = new BasicModule();
         $module->init($this->bridge, [], $this->hookmanager);
 
         $this->assertIsArray($module->getContext());

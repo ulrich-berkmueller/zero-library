@@ -1,8 +1,8 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Timber;
 
 use Gwa\Wordpress\Zero\Timber\Contracts\TimberBridgeInterface;
-use Mockery;
 
 class MockeryTimberBridge implements TimberBridgeInterface
 {
@@ -11,7 +11,7 @@ class MockeryTimberBridge implements TimberBridgeInterface
      */
     private $mock;
 
-    /* -------- */
+    // --------
 
     public function __call($function, $args = [])
     {
@@ -21,7 +21,7 @@ class MockeryTimberBridge implements TimberBridgeInterface
     public function mock()
     {
         if (!isset($this->mock)) {
-            $this->mock = Mockery::mock('TimberBridge');
+            $this->mock = \Mockery::mock('TimberBridge');
         }
 
         return $this->mock;

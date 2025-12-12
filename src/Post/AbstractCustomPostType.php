@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Post;
 
 use Gwa\Wordpress\Zero\Traits\AddCustomControl;
@@ -35,7 +36,7 @@ abstract class AbstractCustomPostType
     {
         $options = array_merge(
             [
-                'supports' => $this->getSupports()
+                'supports' => $this->getSupports(),
             ],
             $this->getOptions()
         );
@@ -43,9 +44,9 @@ abstract class AbstractCustomPostType
         $post = new \CPT(
             [
                 'post_type_name' => $this->getPostType(),
-                'singular'       => $this->getSingular(),
-                'plural'         => $this->getPlural(),
-                'slug'           => $this->getSlug(),
+                'singular' => $this->getSingular(),
+                'plural' => $this->getPlural(),
+                'slug' => $this->getSlug(),
             ],
             $options
         );
@@ -56,7 +57,7 @@ abstract class AbstractCustomPostType
         return $post;
     }
 
-    /* -------- ABSTRACT METHODS -------- */
+    // -------- ABSTRACT METHODS --------
 
     /**
      * @return string
@@ -75,14 +76,16 @@ abstract class AbstractCustomPostType
 
     /**
      * @return string
-     * @link https://developer.wordpress.org/resource/dashicons/
+     *
+     * @see https://developer.wordpress.org/resource/dashicons/
      */
     abstract public function getIcon();
 
-    /* -------- OVERRIDE METHODS --------- */
+    // -------- OVERRIDE METHODS ---------
 
     /**
      * Defaults to slug.
+     *
      * @return string
      */
     public function getSlug()
@@ -120,7 +123,7 @@ abstract class AbstractCustomPostType
     }
 
     /**
-     * @return array|null
+     * @return null|array
      */
     public function getTaxonomySettings()
     {

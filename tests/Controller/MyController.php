@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Controller;
 
 use Gwa\Wordpress\Zero\Controller\AbstractController;

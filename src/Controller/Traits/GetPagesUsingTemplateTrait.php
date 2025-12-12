@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Controller\Traits;
 
 /**
@@ -14,15 +15,15 @@ trait GetPagesUsingTemplateTrait
     public function getPagesUsingTemplate($templatefile)
     {
         return $this->getWpBridge()->getPages([
-            'meta_key'   => '_wp_page_template',
-            'meta_value' => $templatefile
+            'meta_key' => '_wp_page_template',
+            'meta_value' => $templatefile,
         ]);
     }
 
     /**
      * @param string $templatefile Full template filename, including `.php`.
      *
-     * @return \stdClass|null
+     * @return null|\stdClass
      */
     public function getPageUsingTemplate($templatefile)
     {

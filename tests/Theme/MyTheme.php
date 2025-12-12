@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Theme;
 
 use Gwa\Wordpress\Zero\Theme\AbstractTheme;
@@ -7,7 +8,8 @@ class MyTheme extends AbstractTheme
 {
     /**
      * Used for testing.
-     * @var boolean $isinit
+     *
+     * @var bool
      */
     public $isinit = false;
 
@@ -18,7 +20,7 @@ class MyTheme extends AbstractTheme
         $this->addImageSize('thumbnail', 300, 300, true);
 
         $this->registerMenus([
-            'header' => 'Header Menu'
+            'header' => 'Header Menu',
         ]);
 
         $this->isinit = true;
@@ -48,6 +50,7 @@ class MyTheme extends AbstractTheme
     {
         $context = parent::getThemeContext();
         $context['theme'] = 'mytheme';
+
         return $context;
     }
 }

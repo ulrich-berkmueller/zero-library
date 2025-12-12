@@ -1,8 +1,8 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Module;
 
 use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
-use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 
 class CleanUpModule extends AbstractThemeModule
 {
@@ -41,7 +41,7 @@ class CleanUpModule extends AbstractThemeModule
 
     /**
      * Clean the output of attributes of images in editor.
-     * Courtesy of SitePoint. http://www.sitepoint.com/wordpress-change-img-tag-html/
+     * Courtesy of SitePoint. http://www.sitepoint.com/wordpress-change-img-tag-html/.
      *
      * @param string $class
      * @param string $id
@@ -70,27 +70,25 @@ class CleanUpModule extends AbstractThemeModule
         return preg_replace([
             '/\s+width="\d+"/i',
             '/\s+height="\d+"/i',
-            '/alt=""/i'
+            '/alt=""/i',
         ], [
             '',
             '',
             '',
-            'alt="'.$title.'"'
+            'alt="'.$title.'"',
         ], $html);
     }
 
     /**
-     * Remove image attributes
+     * Remove image attributes.
      *
-     * @param  string $html
+     * @param string $html
      *
      * @return string
      */
     public function removeImageAttributes($html)
     {
-        $html = preg_replace('/(width|height)="\d*"\s/', '', $html);
-
-        return $html;
+        return preg_replace('/(width|height)="\d*"\s/', '', $html);
     }
 
     public function shortcodeParagraphFix($content)
@@ -99,7 +97,7 @@ class CleanUpModule extends AbstractThemeModule
         $array = [
             '<p>[' => '[',
             ']</p>' => ']',
-            ']<br />' => ']'
+            ']<br />' => ']',
         ];
 
         return strtr($content, $array);
@@ -109,11 +107,11 @@ class CleanUpModule extends AbstractThemeModule
     {
         return [
             [
-                'hooks'  => 'init',
-                'class'  => $this,
+                'hooks' => 'init',
+                'class' => $this,
                 'method' => 'wpHeadCleanup',
-                'prio'   => 10,
-                'args'   => 1,
+                'prio' => 10,
+                'args' => 1,
             ],
         ];
     }
@@ -127,35 +125,35 @@ class CleanUpModule extends AbstractThemeModule
     {
         return [
             [
-                'hooks'  => 'the_generator',
-                'class'  => $this,
+                'hooks' => 'the_generator',
+                'class' => $this,
                 'method' => 'removeRssVersion',
-                'prio'   => 10,
-                'args'   => 1,
+                'prio' => 10,
+                'args' => 1,
             ], [
-                'hooks'  => 'get_image_tag_class',
-                'class'  => $this,
+                'hooks' => 'get_image_tag_class',
+                'class' => $this,
                 'method' => 'imageTagClassClean',
-                'prio'   => 0,
-                'args'   => 4,
+                'prio' => 0,
+                'args' => 4,
             ], [
-                'hooks'  => 'get_image_tag',
-                'class'  => $this,
+                'hooks' => 'get_image_tag',
+                'class' => $this,
                 'method' => 'imageEditorRemoveHightAndWidth',
-                'prio'   => 0,
-                'args'   => 4,
+                'prio' => 0,
+                'args' => 4,
             ], [
-                'hooks'  => 'the_content',
-                'class'  => $this,
+                'hooks' => 'the_content',
+                'class' => $this,
                 'method' => 'shortcodeParagraphFix',
-                'prio'   => 10,
-                'args'   => 1,
+                'prio' => 10,
+                'args' => 1,
             ], [
-                'hooks'  => ['post_thumbnail_html', 'removeImageAttributes'],
-                'class'  => $this,
+                'hooks' => ['post_thumbnail_html', 'removeImageAttributes'],
+                'class' => $this,
                 'method' => 'removeImageAttributes',
-                'prio'   => 10,
-                'args'   => 1,
+                'prio' => 10,
+                'args' => 1,
             ],
         ];
     }

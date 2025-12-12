@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Shortcode\Contract;
 
 interface TemplateRendererInterface

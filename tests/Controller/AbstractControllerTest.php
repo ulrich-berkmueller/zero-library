@@ -1,23 +1,31 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Controller;
 
-use Gwa\Wordpress\Zero\Timber\MockeryTimberBridge;
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
-use PHPUnit\Framework\TestCase;
+use Gwa\Wordpress\Zero\Timber\MockeryTimberBridge;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
+use Timber\Post;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AbstractControllerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
+
     public function testConstruct(): void
     {
-        $controller = new MyController;
+        $controller = new MyController();
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Controller\AbstractController', $controller);
     }
 
     public function testCacheMode(): void
     {
-        $controller = new MyController;
+        $controller = new MyController();
 
         $controller->setCacheMode('transient');
         $controller->setCacheExpiresSeconds(60);
@@ -31,11 +39,12 @@ class AbstractControllerTest extends TestCase
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPost')
-            ->with(false, \Timber\Post::class)
+            ->with(false, Post::class)
             ->andReturn(['dummy-post'])
-            ->mock();
+            ->mock()
+        ;
 
-        $controller = new MyController;
+        $controller = new MyController();
         $controller->setTimberBridge($bridge);
 
         $post = $controller->getPost();
@@ -49,9 +58,10 @@ class AbstractControllerTest extends TestCase
             ->shouldReceive('getPost')
             ->with(['foo' => 'bar'], '\MyPostClass')
             ->andReturn(['dummy-post'])
-            ->mock();
+            ->mock()
+        ;
 
-        $controller = new MyController;
+        $controller = new MyController();
         $controller->setTimberBridge($bridge);
 
         $post = $controller->getPostForArgs(['foo' => 'bar'], '\MyPostClass');
@@ -63,10 +73,11 @@ class AbstractControllerTest extends TestCase
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPosts')
-            ->with(false, \Timber\Post::class, false)
+            ->with(false, Post::class, false)
             ->andReturn(['p1', 'p2'])
             ->once()
-            ->mock();
+            ->mock()
+        ;
 
         $controller = new MyController();
         $controller->setTimberBridge($bridge);
@@ -82,7 +93,8 @@ class AbstractControllerTest extends TestCase
             ->shouldReceive('getPosts')
             ->with(['foo' => 'bar'], '\MyPostClass', 'collection')
             ->andReturn(['p1'])
-            ->mock();
+            ->mock()
+        ;
 
         $controller = new MyController();
         $controller->setTimberBridge($bridge);
@@ -99,14 +111,16 @@ class AbstractControllerTest extends TestCase
             ->andReturn([])
             ->shouldReceive('render')
             ->with([], [], false, 'default')
-            ->mock();
+            ->mock()
+        ;
 
-        $MockBridge = new MockeryWpBridge;
+        $MockBridge = new MockeryWpBridge();
         $MockBridge->mock()
             ->shouldReceive('addFilter')
-            ->mock();
+            ->mock()
+        ;
 
-        $controller = new MyController;
+        $controller = new MyController();
         $controller->setTimberBridge($bridge);
         $controller->setWpBridge($MockBridge);
 

@@ -1,17 +1,26 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Module;
 
-use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeInterface;
-use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 use Gwa\Wordpress\Zero\Theme\HookManager;
 use Gwa\Wordpress\Zero\Traits\HasTheme;
+use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeInterface;
+use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 
 /**
  * Extend this class to create a theme module to group WP customizations meaningfully.
  */
 abstract class AbstractThemeModule
 {
-    use WpBridgeTrait, HasTheme;
+    use WpBridgeTrait;
+    use HasTheme;
+
+    /**
+     * Each module should have a unique slug.
+     *
+     * @var string
+     */
+    protected $slug;
 
     /**
      * @var array
@@ -23,21 +32,10 @@ abstract class AbstractThemeModule
      */
     private $hookmanager;
 
-    /**
-     * Each module should have a unique slug.
-     * @var string $slug
-     */
-    protected $slug;
-
-    /**
-     * @param WpBridgeInterface $bridge
-     * @param array $settings
-     * @param HookManager $hookmanager
-     */
     final public function init(WpBridgeInterface $bridge, array $settings, HookManager $hookmanager)
     {
         $this->setWpBridge($bridge);
-        $this->settings    = $settings;
+        $this->settings = $settings;
         $this->hookmanager = $hookmanager;
 
         $this->doInit();
@@ -48,13 +46,6 @@ abstract class AbstractThemeModule
         $this->getHookManager()->addFilters($this->getFilterMap());
     }
 
-    /* ---------------- */
-
-    protected function doInit()
-    {
-        // Override in subclass, if required
-    }
-
     /**
      * @return array
      */
@@ -62,6 +53,21 @@ abstract class AbstractThemeModule
     {
         // Override in subclass, if required
         return [];
+    }
+
+    /**
+     * @return null|string
+     */
+    final public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    // ----------------
+
+    protected function doInit()
+    {
+        // Override in subclass, if required
     }
 
     /**
@@ -104,16 +110,6 @@ abstract class AbstractThemeModule
         return [];
     }
 
-    /* ---------------- */
-
-    private function registerShortcodes(array $shortcodeclasses)
-    {
-        foreach ($shortcodeclasses as $shortcodeclass) {
-            $instance = new $shortcodeclass;
-            $instance->init($this->getWpBridge(), $this);
-        }
-    }
-
     /**
      * @return HookManager
      */
@@ -122,11 +118,13 @@ abstract class AbstractThemeModule
         return $this->hookmanager;
     }
 
-    /**
-     * @return string|null
-     */
-    final public function getSlug()
+    // ----------------
+
+    private function registerShortcodes(array $shortcodeclasses)
     {
-        return $this->slug;
+        foreach ($shortcodeclasses as $shortcodeclass) {
+            $instance = new $shortcodeclass();
+            $instance->init($this->getWpBridge(), $this);
+        }
     }
 }

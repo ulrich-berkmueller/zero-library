@@ -1,22 +1,30 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Shortcode;
 
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
-use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AbstractShortcodeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
+
     public function testConstruct(): void
     {
-        $bridge = new MockeryWpBridge;
+        $bridge = new MockeryWpBridge();
         $bridge->mock()
             ->shouldReceive('addShortcode')
             ->shouldReceive('shortcodeAtts')
-            ->mock();
-        $module = new \stdClass;
-        $instance = new MyShortcode;
+            ->mock()
+        ;
+        $module = new \stdClass();
+        $instance = new MyShortcode();
 
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Shortcode\AbstractShortcode', $instance);
 
@@ -28,7 +36,7 @@ class AbstractShortcodeTest extends TestCase
 
     public function testGetIdsArray(): void
     {
-        $instance = new MyShortcode;
+        $instance = new MyShortcode();
         $ids = '1,2,4';
 
         $arr = $instance->getIds($ids);

@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Module;
 
 use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
@@ -6,11 +7,6 @@ use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 class MyModule extends AbstractThemeModule
 {
     public $isinit = false;
-
-    protected function doInit()
-    {
-        $this->isinit = true;
-    }
 
     /**
      * @return array
@@ -20,13 +16,18 @@ class MyModule extends AbstractThemeModule
         return ['foo' => 'bar'];
     }
 
+    protected function doInit()
+    {
+        $this->isinit = true;
+    }
+
     /**
      * @return array
      */
     protected function getShortcodeClasses()
     {
         return [
-            'Gwa\Wordpress\Zero\Test\Shortcode\MyShortcode'
+            'Gwa\Wordpress\Zero\Test\Shortcode\MyShortcode',
         ];
     }
 }

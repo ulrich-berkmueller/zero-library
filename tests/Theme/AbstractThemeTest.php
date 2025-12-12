@@ -1,11 +1,17 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Theme;
 
-use Gwa\Wordpress\Zero\Theme\MenuFactory\MockMenuFactory;
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
-use PHPUnit\Framework\TestCase;
+use Gwa\Wordpress\Zero\Theme\MenuFactory\MockMenuFactory;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AbstractThemeTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -14,13 +20,13 @@ class AbstractThemeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bridge = new MockeryWpBridge;
-        $this->instance = new MyTheme;
-        $this->instance->setMenuFactory(new MockMenuFactory);
+        $this->bridge = new MockeryWpBridge();
+        $this->instance = new MyTheme();
+        $this->instance->setMenuFactory(new MockMenuFactory());
         $this->instance->setWpBridge($this->bridge);
     }
 
-    /* ---------------- */
+    // ----------------
 
     public function testConstruct(): void
     {
@@ -34,10 +40,10 @@ class AbstractThemeTest extends TestCase
 
     public function testDevelopmentEnvironmentNotIndexable(): void
     {
-        $bridge = new MockeryWpBridge;
+        $bridge = new MockeryWpBridge();
 
         $theme = new BasicTheme('development');
-        $theme->setMenuFactory(new MockMenuFactory);
+        $theme->setMenuFactory(new MockMenuFactory());
         $theme->setWpBridge($bridge);
         $theme->init();
 
@@ -66,7 +72,8 @@ class AbstractThemeTest extends TestCase
             ->shouldReceive('loadThemeTextdomain')
             ->with('mytheme', '/foo/languages')
             ->once()
-            ->mock();
+            ->mock()
+        ;
         $this->instance->addThemeLangSupport();
     }
 
@@ -90,7 +97,7 @@ class AbstractThemeTest extends TestCase
 
     public function testGetDefaultMenuFactory(): void
     {
-        $this->instance = new MyTheme;
+        $this->instance = new MyTheme();
         $this->assertInstanceOf('Gwa\Wordpress\Zero\Theme\MenuFactory\TimberMenuFactory', $this->instance->getMenuFactory());
     }
 
@@ -104,7 +111,7 @@ class AbstractThemeTest extends TestCase
         $this->assertSame($this->instance->getTimberBridge(), $controller->getTimberBridge());
     }
 
-    /* --------- */
+    // ---------
 
     private function mockBridgeForInit()
     {
@@ -114,6 +121,7 @@ class AbstractThemeTest extends TestCase
             ->shouldReceive('addImageSize')
             ->with('thumbnail', 300, 300, true)
             ->shouldReceive('registerNavMenus')
-            ->mock();
+            ->mock()
+        ;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\WpBridge\Contracts;
 
 interface WpBridgeInterface

@@ -1,13 +1,13 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Controller;
 
-use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeAwareInterface;
-use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
-use Gwa\Wordpress\Zero\Theme\AbstractTheme;
 use Gwa\Wordpress\Zero\Timber\Traits\TimberBridgeTrait;
 use Gwa\Wordpress\Zero\Traits\HasTheme;
-use LogicException;
+use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeAwareInterface;
+use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 use Timber\Loader;
+use Timber\Post;
 
 abstract class AbstractController
 {
@@ -16,11 +16,11 @@ abstract class AbstractController
     use HasTheme;
 
     protected $cacheType = [
-        'none'           => Loader::CACHE_NONE,
-        'object'         => Loader::CACHE_OBJECT,
-        'transient'      => Loader::CACHE_TRANSIENT,
+        'none' => Loader::CACHE_NONE,
+        'object' => Loader::CACHE_OBJECT,
+        'transient' => Loader::CACHE_TRANSIENT,
         'site.transient' => Loader::CACHE_SITE_TRANSIENT,
-        'default'        => Loader::CACHE_USE_DEFAULT,
+        'default' => Loader::CACHE_USE_DEFAULT,
     ];
 
     /**
@@ -34,7 +34,8 @@ abstract class AbstractController
     protected $cacheMode = Loader::CACHE_USE_DEFAULT;
 
     /**
-     * @param string  $mode
+     * @param string $mode
+     *
      * @return self
      */
     public function setCacheMode($mode = 'default')
@@ -53,7 +54,8 @@ abstract class AbstractController
     }
 
     /**
-     * @param integer $seconds
+     * @param int $seconds
+     *
      * @return self
      */
     public function setCacheExpiresSeconds($seconds)
@@ -64,7 +66,7 @@ abstract class AbstractController
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getCacheExpiresSeconds()
     {
@@ -72,7 +74,7 @@ abstract class AbstractController
     }
 
     /**
-     * @return array<string,\Timber|string>|null|array
+     * @return null|array|array<string,string|\Timber>
      */
     abstract public function getContext();
 
@@ -83,9 +85,10 @@ abstract class AbstractController
 
     /**
      * @param string $postClass
-     * @return array|boolean|null
+     *
+     * @return null|array|bool
      */
-    public function getPost($postClass = \Timber\Post::class)
+    public function getPost($postClass = Post::class)
     {
         return $this->getPostForArgs(false, $postClass);
     }
@@ -94,20 +97,20 @@ abstract class AbstractController
      * @param string[] $args
      * @param string   $postClass
      *
-     * @return array|boolean|null
+     * @return null|array|bool
      */
-    public function getPostForArgs($args, $postClass = \Timber\Post::class)
+    public function getPostForArgs($args, $postClass = Post::class)
     {
         return $this->getTimberBridge()->getPost($args, $postClass);
     }
 
     /**
-     * @param string  $postClass
-     * @param boolean $collection
+     * @param string $postClass
+     * @param bool   $collection
      *
-     * @return array|boolean|null
+     * @return null|array|bool
      */
-    public function getPosts($postClass = \Timber\Post::class, $collection = false)
+    public function getPosts($postClass = Post::class, $collection = false)
     {
         return $this->getPostsForArgs(false, $postClass, $collection);
     }
@@ -115,25 +118,25 @@ abstract class AbstractController
     /**
      * @param string[] $args
      * @param string   $postClass
-     * @param boolean  $collection
+     * @param bool     $collection
      *
-     * @return array|boolean|null
+     * @return null|array|bool
      */
-    public function getPostsForArgs($args, $postClass = \Timber\Post::class, $collection = false)
+    public function getPostsForArgs($args, $postClass = Post::class, $collection = false)
     {
         return $this->getTimberBridge()->getPosts($args, $postClass, $collection);
     }
 
     /**
-     *  Render template
+     *  Render template.
      *
-     * @return boolean|string|null
+     * @return null|bool|string
      */
     public function render()
     {
         $this->getWpBridge()->addFilter('timber_post_getter_get_posts', [$this, 'addWpBridgeToPosts'], 10, 3);
 
-        $context   = $this->getContext();
+        $context = $this->getContext();
         $templates = $this->getTemplates();
 
         $this->validateTemplates($templates);
@@ -142,32 +145,43 @@ abstract class AbstractController
         $this->getTimberBridge()->render(
             $templates,
             array_merge($this->getTimberBridge()->getContext(), $context),
-            ($this->getCacheExpiresSeconds() ?: false), // False disables cache altogether.
+            $this->getCacheExpiresSeconds() ?: false, // False disables cache altogether.
             $this->getCacheMode()
         );
     }
 
+    public function addWpBridgeToPosts($posts)
+    {
+        foreach ($posts as $key => $post) {
+            if ($post instanceof WpBridgeAwareInterface) {
+                $posts[$key] = $post->setWpBridge($this->getWpBridge());
+            }
+        }
+
+        return $posts;
+    }
+
     /**
-     * Check if context is a array
+     * Check if context is a array.
      *
-     * @param array|null $context
+     * @param null|array $context
      */
     protected function validateContext($context)
     {
         if (!is_array($context)) {
-            throw new LogicException('::getContext should return a array');
+            throw new \LogicException('::getContext should return a array');
         }
     }
 
     /**
-     * Check if getTemplates is a array and template file exist
+     * Check if getTemplates is a array and template file exist.
      *
      * @param string[] $templates
      */
     protected function validateTemplates($templates)
     {
         if (!is_array($templates)) {
-            throw new LogicException('::getTemplates should return a array');
+            throw new \LogicException('::getTemplates should return a array');
         }
     }
 
@@ -180,16 +194,5 @@ abstract class AbstractController
     protected function getTemplateSlug()
     {
         return $this->getWpBridge()->getPageTemplateSlug();
-    }
-
-    public function addWpBridgeToPosts($posts)
-    {
-        foreach ($posts as $key => $post) {
-            if ($post instanceof WpBridgeAwareInterface) {
-                $posts[$key] = $post->setWpBridge($this->getWpBridge());
-            }
-        }
-
-        return $posts;
     }
 }

@@ -23,7 +23,7 @@ return (new Config())
             // 💡 folders to exclude, if any
             // ->exclude([/* ... */])
             // 💡 path patterns to exclude, if any
-            ->notPath(['vendor', 'wp-content'])
+             ->notPath(['vendor', 'wp-content'])
             // 💡 extra configs
             // ->ignoreDotFiles(false) // true by default in v3, false in v4 or future mode
             // ->ignoreVCS(true) // true by default

@@ -1,9 +1,10 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Shortcode;
 
+use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeInterface;
 use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
-use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 
 /**
  * Abstract class to be extended by all shortcodes.
@@ -14,12 +15,11 @@ abstract class AbstractShortcode
     use WpBridgeTrait;
 
     /**
-     * AbstractThemeModule
+     * AbstractThemeModule.
      */
     private $module;
 
     /**
-     * @param WpBridgeInterface $bridge
      * @param AbstractThemeModule $module
      */
     final public function init(WpBridgeInterface $bridge, $module = null)
@@ -29,6 +29,31 @@ abstract class AbstractShortcode
         $this->getWpBridge()->addShortcode($this->getShortcode(), [$this, 'render']);
 
         $this->doInit();
+    }
+
+    /**
+     * Returns the unique shortcode "slug".
+     *
+     * @return string
+     */
+    abstract public function getShortcode();
+
+    /**
+     * Renders the final content.
+     *
+     * @param array  $atts
+     * @param string $content
+     *
+     * @return string
+     */
+    abstract public function render($atts, $content = '');
+
+    /**
+     * @return null|AbstractThemeModule
+     */
+    final public function getModule()
+    {
+        return $this->module;
     }
 
     protected function doInit()
@@ -51,34 +76,11 @@ abstract class AbstractShortcode
      * defined in `getDefaultAtts`.
      *
      * @param array $atts
+     *
      * @return array
      */
     final protected function getNormedAtts($atts)
     {
         return $this->getWpBridge()->shortcodeAtts($this->getDefaultAtts(), $atts);
-    }
-
-    /**
-     * Returns the unique shortcode "slug".
-     *
-     * @return string
-     */
-    abstract public function getShortcode();
-
-    /**
-     * Renders the final content.
-     *
-     * @param array $atts
-     * @param string $content
-     * @return string
-     */
-    abstract public function render($atts, $content = '');
-
-    /**
-     * @return AbstractThemeModule|null
-     */
-    final public function getModule()
-    {
-        return $this->module;
     }
 }

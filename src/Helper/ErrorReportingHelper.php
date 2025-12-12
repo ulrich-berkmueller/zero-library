@@ -12,6 +12,7 @@ class ErrorReportingHelper
         $result = $callable();
 
         error_reporting($errorReportingWas);
+
         return $result;
     }
 }

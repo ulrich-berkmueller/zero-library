@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Traits;
 
 use Gwa\Wordpress\Zero\Theme\AbstractTheme;
@@ -21,12 +22,10 @@ trait HasTheme
         return $this->theme;
     }
 
-    /**
-     * @param AbstractTheme $theme
-     */
     public function setTheme(AbstractTheme $theme)
     {
         $this->theme = $theme;
+
         return $this;
     }
 }

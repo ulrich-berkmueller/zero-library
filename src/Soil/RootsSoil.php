@@ -1,22 +1,23 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Soil;
 
 class RootsSoil
 {
     /**
-     * All soil theme func
+     * All soil theme func.
      *
      * @var array
      */
     protected $soilFunc = [
-        'clean-up'                 => true,
-        'disable-rest-api'         => false,
+        'clean-up' => true,
+        'disable-rest-api' => false,
         'disable-asset-versioning' => true,
-        'disable-trackbacks'       => true,
-        'js-to-footer'             => true,
-        'nav-walker'               => true,
-        'nice-search'              => true,
-        'relative-urls'            => true,
+        'disable-trackbacks' => true,
+        'js-to-footer' => true,
+        'nav-walker' => true,
+        'nice-search' => true,
+        'relative-urls' => true,
     ];
 
     protected $google = [
@@ -25,9 +26,7 @@ class RootsSoil
     ];
 
     /**
-     * Change the standard configs
-     *
-     * @param  array $soil
+     * Change the standard configs.
      *
      * @return self
      */
@@ -39,7 +38,7 @@ class RootsSoil
     }
 
     /**
-     * Add google analytics
+     * Add google analytics.
      *
      * @param bool   $boot
      * @param string $user
@@ -56,14 +55,14 @@ class RootsSoil
     public function init()
     {
         foreach ($this->soilFunc as $key => $value) {
-            if ($value === true) {
+            if (true === $value) {
                 add_theme_support('soil', $key);
             }
         }
 
         $google = $this->google;
 
-        if (is_bool($google['boot']) && $google['boot'] === true) {
+        if (is_bool($google['boot']) && true === $google['boot']) {
             add_theme_support('soil', ['google-analytics' => $google['user']]);
         }
     }

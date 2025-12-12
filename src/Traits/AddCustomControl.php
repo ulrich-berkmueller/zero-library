@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Traits;
 
 /**
@@ -8,14 +9,16 @@ namespace Gwa\Wordpress\Zero\Traits;
 trait AddCustomControl
 {
     /**
-     * @param string|array $posttype
-     * @param string $slug
-     * @param string $title
-     * @param string $context
-     * @param string $priority
-     * @param boolean $shownames
+     * @param array|string $posttype
+     * @param string       $slug
+     * @param string       $title
+     * @param string       $context
+     * @param string       $priority
+     * @param bool         $shownames
+     *
      * @return \CMB2
-     * @link https://github.com/WebDevStudios/CMB2
+     *
+     * @see https://github.com/WebDevStudios/CMB2
      */
     protected function createControlBox($posttype, $slug = 'custom_meta', $title = 'Custom data', $context = 'normal', $priority = 'default', $shownames = true)
     {
@@ -24,31 +27,32 @@ trait AddCustomControl
         }
 
         return new_cmb2_box([
-            'id'            => $slug,
-            'title'         => $title,
-            'object_types'  => $posttype,
-            'context'       => $context,
-            'priority'      => $priority,
-            'show_names'    => $shownames,
+            'id' => $slug,
+            'title' => $title,
+            'object_types' => $posttype,
+            'context' => $context,
+            'priority' => $priority,
+            'show_names' => $shownames,
         ]);
     }
 
     /**
-     * @param \CMB2 $box
-     * @param string $type Type of field
+     * @param \CMB2  $box
+     * @param string $type        Type of field
      * @param string $slug
      * @param string $name
      * @param string $description
-     * @param array $atts
-     * @link https://github.com/WebDevStudios/CMB2
+     * @param array  $atts
+     *
+     * @see https://github.com/WebDevStudios/CMB2
      */
     protected function addFieldToBox($box, $type, $slug, $name, $description = '', $atts = [])
     {
         $defaults = [
-            'name'    => $name,
-            'desc'    => $description,
-            'id'      => $slug,
-            'type'    => $type
+            'name' => $name,
+            'desc' => $description,
+            'id' => $slug,
+            'type' => $type,
         ];
 
         $atts = array_merge($defaults, $atts);

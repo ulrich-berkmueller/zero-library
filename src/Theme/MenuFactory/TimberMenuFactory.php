@@ -8,7 +8,9 @@ class TimberMenuFactory implements MenuFactoryContract
 {
     /**
      * @param string $slug
+     *
      * @return TimberMenu
+     *
      * @codeCoverageIgnore
      */
     public function create($slug)

@@ -1,43 +1,48 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Module;
 
 use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
-use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 
 class IdColumnsModule extends AbstractThemeModule
 {
     use WpBridgeTrait;
 
     /**
-     * Add id columns to column posts
+     * Add id columns to column posts.
      *
      * @param array $defaults
      */
     public function addColumnId($defaults)
     {
         $defaults['date column-id'] = __('ID');
+
         return $defaults;
     }
 
     /**
-     * Add id columns to custom column post
+     * Add id columns to custom column post.
      *
      * @param string $columnName
      * @param string $id
      */
     public function addColumnIdValue($columnName, $id)
     {
-        if ($columnName === 'date column-id') {
+        if ('date column-id' === $columnName) {
             echo $id;
         }
     }
 
     /**
-    * Return the ID for the column
-    */
+     * Return the ID for the column.
+     *
+     * @param mixed $value
+     * @param mixed $columName
+     * @param mixed $id
+     */
     public function addColumnReturnValue($value, $columName, $id)
     {
-        if ($columName === 'date column-id') {
+        if ('date column-id' === $columName) {
             $value = $id;
         }
 
@@ -45,7 +50,7 @@ class IdColumnsModule extends AbstractThemeModule
     }
 
     /**
-     * Adds a id column on all admin pages
+     * Adds a id column on all admin pages.
      */
     public function addIdColumn()
     {
@@ -79,11 +84,11 @@ class IdColumnsModule extends AbstractThemeModule
     {
         return [
             [
-                'hooks'  => 'admin_init',
-                'class'  => $this,
+                'hooks' => 'admin_init',
+                'class' => $this,
                 'method' => 'addIdColumn',
-                'prio'   => 199,
-                'args'   => 1,
+                'prio' => 199,
+                'args' => 1,
             ],
         ];
     }

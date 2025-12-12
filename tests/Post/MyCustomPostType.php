@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\Post;
 
 use Gwa\Wordpress\Zero\Post\AbstractCustomPostType;
@@ -31,7 +32,8 @@ class MyCustomPostType extends AbstractCustomPostType
 
     /**
      * @return string
-     * @link https://developer.wordpress.org/resource/dashicons/
+     *
+     * @see https://developer.wordpress.org/resource/dashicons/
      */
     public function getIcon()
     {

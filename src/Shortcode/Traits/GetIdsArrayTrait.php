@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Shortcode\Traits;
 
 /**
@@ -8,6 +9,7 @@ trait GetIdsArrayTrait
 {
     /**
      * @param string $ids comma separated ids
+     *
      * @return array
      */
     protected function getIdsArray($ids)

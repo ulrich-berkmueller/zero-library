@@ -1,7 +1,7 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Test\WpBridge;
 
-use stdClass;
 use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeInterface;
 use Mockery;
 
@@ -42,12 +42,31 @@ class MockeryWpBridge implements WpBridgeInterface
      */
     private $themeSupport = [];
 
+    // --------
+
+    /**
+     * Wordpress mock on __() func.
+     *
+     * @param string $text
+     * @param string $domain
+     *
+     * @return string
+     */
+    public function __($text, $domain)
+    {
+        return $text;
+    }
+
+    public function __call($function, $args)
+    {
+        return call_user_func_array([$this->mock(), $function], $args);
+    }
+
     /**
      * Add a shortcode.
      *
      * @param string $tag
-     *
-     * @param mixed $func
+     * @param mixed  $func
      */
     public function addShortcode($tag, $func)
     {
@@ -61,7 +80,7 @@ class MockeryWpBridge implements WpBridgeInterface
      *
      * @param string $tag
      *
-     * @return boolean
+     * @return bool
      */
     public function hasShortcode($tag)
     {
@@ -77,7 +96,7 @@ class MockeryWpBridge implements WpBridgeInterface
      */
     public function getShortcodeCallback($tag)
     {
-        return isset($this->shortcodes[$tag]) ? $this->shortcodes[$tag] : null;
+        return $this->shortcodes[$tag] ?? null;
     }
 
     /**
@@ -85,7 +104,7 @@ class MockeryWpBridge implements WpBridgeInterface
      *
      * @param array       $pairs
      * @param array       $atts
-     * @param string|null $shortcode
+     * @param null|string $shortcode
      *
      * @return array
      */
@@ -94,28 +113,13 @@ class MockeryWpBridge implements WpBridgeInterface
         return array_merge($pairs, $atts);
     }
 
-    /* -------- */
-
-    /**
-     * Wordpress mock on __() func.
-     *
-     * @param  string $text
-     * @param  string $domain
-     *
-     * @return string
-     */
-    public function __($text, $domain)
-    {
-        return $text;
-    }
-
-    /* -------- */
+    // --------
 
     /**
      * Wordpress mock on add_filter func.
      *
      * @param string   $filterName
-     * @param callback $filterCall
+     * @param callable $filterCall
      * @param int      $prio
      * @param int      $numVars
      *
@@ -142,7 +146,7 @@ class MockeryWpBridge implements WpBridgeInterface
      * Wordpress mock on add_action func.
      *
      * @param string   $filterName
-     * @param callback $filterCall
+     * @param callable $filterCall
      * @param int      $prio
      * @param int      $numVars
      *
@@ -156,7 +160,7 @@ class MockeryWpBridge implements WpBridgeInterface
     }
 
     /**
-     * Get added actions
+     * Get added actions.
      *
      * @return array
      */
@@ -175,8 +179,8 @@ class MockeryWpBridge implements WpBridgeInterface
      */
     public function addThemeSupport($feature, $arguments)
     {
-        $data            = new stdClass();
-        $data->feature   = $feature;
+        $data = new \stdClass();
+        $data->feature = $feature;
         $data->arguments = $arguments;
 
         $this->themeSupport[] = $data;
@@ -185,7 +189,7 @@ class MockeryWpBridge implements WpBridgeInterface
     }
 
     /**
-     * Get added theme supports
+     * Get added theme supports.
      *
      * @return array
      */
@@ -197,22 +201,17 @@ class MockeryWpBridge implements WpBridgeInterface
     public function mock()
     {
         if (!isset($this->mock)) {
-            $this->mock = Mockery::mock('WpBridge');
+            $this->mock = \Mockery::mock('WpBridge');
         }
 
         return $this->mock;
     }
 
-    public function __call($function, $args)
-    {
-        return call_user_func_array([$this->mock(), $function], $args);
-    }
-
     /**
-     * add
+     * add.
      *
      * @param string   $filterName
-     * @param callback $filterCall
+     * @param callable $filterCall
      * @param int      $prio
      * @param int      $numVars
      *
@@ -220,11 +219,11 @@ class MockeryWpBridge implements WpBridgeInterface
      */
     private function add($filterName, $filterCall, $prio, $numVars)
     {
-        $data             = new stdClass();
+        $data = new \stdClass();
         $data->filtername = $filterName;
-        $data->callback   = $filterCall;
-        $data->prio       = $prio;
-        $data->numvars    = $numVars;
+        $data->callback = $filterCall;
+        $data->prio = $prio;
+        $data->numvars = $numVars;
 
         return $data;
     }

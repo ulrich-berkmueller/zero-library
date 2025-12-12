@@ -1,4 +1,5 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Theme;
 
 use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeAwareInterface;
@@ -17,64 +18,58 @@ class HookManager
     private $instances = [];
 
     /**
-     * @param string $action
-     * @param string|object $class
-     * @param string $method
-     * @param integer $prio
-     * @param integer $args
+     * @param string        $action
+     * @param object|string $class
+     * @param string        $method
+     * @param int           $prio
+     * @param int           $args
      */
     public function addAction($action, $class, $method, $prio = 10, $args = 1)
     {
         $this->initHook(
             [
-                'hooks'  => $action,
-                'class'  => $class,
+                'hooks' => $action,
+                'class' => $class,
                 'method' => $method,
-                'prio'   => $prio,
-                'args'   => $args,
+                'prio' => $prio,
+                'args' => $args,
             ],
             'action'
         );
     }
 
-    /**
-     * @param array $filtermap
-     */
     public function addActions(array $actions)
     {
         $this->initHooks($actions, 'action');
     }
 
     /**
-     * @param string $action
-     * @param string|object $class
-     * @param string $method
-     * @param integer $prio
-     * @param integer $args
+     * @param string        $action
+     * @param object|string $class
+     * @param string        $method
+     * @param int           $prio
+     * @param int           $args
      */
     public function addFilter($action, $class, $method, $prio = 10, $args = 1)
     {
         $this->initHook(
             [
-                'hooks'  => $action,
-                'class'  => $class,
+                'hooks' => $action,
+                'class' => $class,
                 'method' => $method,
-                'prio'   => $prio,
-                'args'   => $args,
+                'prio' => $prio,
+                'args' => $args,
             ],
             'filter'
         );
     }
 
-    /**
-     * @param array $filtermap
-     */
     public function addFilters(array $filters)
     {
         $this->initHooks($filters, 'filter');
     }
 
-    /* ---------------- */
+    // ----------------
 
     private function initHooks(array $map, $hookkey)
     {
@@ -85,15 +80,15 @@ class HookManager
 
     private function initHook(array $settings, $hookkey)
     {
-        $action   = 'add' . ucfirst($hookkey);
+        $action = 'add'.ucfirst($hookkey);
 
-        $hooks    = is_array($settings['hooks']) ? $settings['hooks'] : [$settings['hooks']];
+        $hooks = is_array($settings['hooks']) ? $settings['hooks'] : [$settings['hooks']];
 
         $classarg = $settings['class'];
-        $method   = isset($settings['method']) ? $settings['method'] : $hookkey;
+        $method = $settings['method'] ?? $hookkey;
 
-        $prio     = isset($settings['prio']) ? (int) $settings['prio'] : 10;
-        $args     = isset($settings['args']) ? (int) $settings['args'] : 1;
+        $prio = isset($settings['prio']) ? (int) $settings['prio'] : 10;
+        $args = isset($settings['args']) ? (int) $settings['args'] : 1;
 
         $instance = $this->getClassInstance($classarg);
 
@@ -109,7 +104,8 @@ class HookManager
     }
 
     /**
-     * @param string|object $classarg
+     * @param object|string $classarg
+     *
      * @return object
      */
     private function getClassInstance($classarg)
@@ -119,7 +115,7 @@ class HookManager
         }
 
         if (!array_key_exists($classarg, $this->instances)) {
-            $class = new $classarg;
+            $class = new $classarg();
 
             if ($class instanceof WpBridgeAwareInterface) {
                 $class->setWpBridge($this->getWpBridge());

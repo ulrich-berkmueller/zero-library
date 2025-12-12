@@ -1,12 +1,14 @@
 <?php
+
 namespace Gwa\Wordpress\Zero\Theme;
 
-use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
-use Gwa\Wordpress\Zero\WpBridge\WpBridge;
+use Gwa\Wordpress\Zero\Controller\AbstractController;
 use Gwa\Wordpress\Zero\Theme\MenuFactory\MenuFactoryContract;
 use Gwa\Wordpress\Zero\Theme\MenuFactory\TimberMenuFactory;
 use Gwa\Wordpress\Zero\Timber\TimberBridge;
 use Gwa\Wordpress\Zero\Timber\Traits\TimberBridgeTrait;
+use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
+use Gwa\Wordpress\Zero\WpBridge\WpBridge;
 use Timber\Timber;
 
 /**
@@ -18,33 +20,34 @@ abstract class AbstractTheme
     use WpBridgeTrait;
 
     /**
-     * @var string $environment
-     */
-    private $environment;
-
-    /**
-     * @var array $menus
-     */
-    private $menus = [];
-
-    /**
-     * @var array $modules
-     */
-    private $modules = [];
-
-    /**
      * Set in concrete Theme class to activate language support.
-     * @var string $textdomain
+     *
+     * @var string
      */
     protected $textdomain;
 
     /**
-     * @var HookManager $hookmanager
+     * @var string
+     */
+    private $environment;
+
+    /**
+     * @var array
+     */
+    private $menus = [];
+
+    /**
+     * @var array
+     */
+    private $modules = [];
+
+    /**
+     * @var HookManager
      */
     private $hookmanager;
 
     /**
-     * @var MenuFactoryContract $menufactory
+     * @var MenuFactoryContract
      */
     private $menufactory;
 
@@ -56,15 +59,27 @@ abstract class AbstractTheme
         $this->environment = $environment;
 
         // set default WpBridge
-        $this->setWpBridge(new WpBridge);
+        $this->setWpBridge(new WpBridge());
 
         // set default TimberBridge
-        $this->setTimberBridge(new TimberBridge);
+        $this->setTimberBridge(new TimberBridge());
+    }
+
+    /**
+     * Convenience method to allow modules and controllers to get translated text from the theme text domain.
+     *
+     * @param string $text
+     *
+     * @return string
+     */
+    final public function __($text)
+    {
+        return $this->getWpBridge()->__($text, $this->getTextDomain());
     }
 
     final public function init()
     {
-        $this->hookmanager = (new HookManager)->setWpBridge($this->getWpBridge());
+        $this->hookmanager = (new HookManager())->setWpBridge($this->getWpBridge());
 
         $this->doInit();
         $this->registerModules($this->getModuleClasses(), $this->hookmanager);
@@ -77,9 +92,79 @@ abstract class AbstractTheme
         }
 
         // Prevent indexing on non-production environments
-        if ($this->environment !== 'production') {
+        if ('production' !== $this->environment) {
             $this->getWpBridge()->addFilter('pre_option_blog_public', '__return_false');
         }
+    }
+
+    final public function addThemeLangSupport()
+    {
+        $this->getWpBridge()->loadThemeTextdomain(
+            $this->textdomain,
+            $this->getWpBridge()->getTemplateDirectory().'/languages'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    final public function addToContext(array $data)
+    {
+        return array_merge(
+            $data,
+            $this->getMenuInstances(),
+            $this->getModulesContext(),
+            $this->getThemeContext()
+        );
+    }
+
+    /**
+     * Creates a controller (typically from a WP theme PHP file).
+     *
+     * @param string $classname
+     *
+     * @return AbstractController
+     */
+    public function createController($classname)
+    {
+        return (new $classname())
+            ->setTheme($this)
+            ->setTimberBridge($this->getTimberBridge())
+            ->setWpBridge($this->getWpBridge())
+        ;
+    }
+
+    /**
+     * @return MenuFactoryContract
+     */
+    final public function getMenuFactory()
+    {
+        if (!isset($this->menufactory)) {
+            $this->menufactory = new TimberMenuFactory();
+        }
+
+        return $this->menufactory;
+    }
+
+    final public function setMenuFactory(MenuFactoryContract $factory)
+    {
+        $this->menufactory = $factory;
+    }
+
+    /**
+     * @return string
+     */
+    final public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @return null|string
+     */
+    final public function getTextDomain()
+    {
+        return $this->textdomain;
     }
 
     /**
@@ -113,12 +198,13 @@ abstract class AbstractTheme
         return [];
     }
 
-    /* ---------------- */
+    // ----------------
 
     /**
      * Sets the absolute path to the directory containing the twig files.
      *
      * @param string $path
+     *
      * @codeCoverageIgnore
      */
     final protected function setViewsDirectory($path)
@@ -126,84 +212,26 @@ abstract class AbstractTheme
         Timber::$locations = $path;
     }
 
-    private function registerModules(array $moduleclasses, HookManager $hookmanager)
-    {
-        foreach ($moduleclasses as $key => $value) {
-            if (is_numeric($key)) {
-                $moduleclass = $value;
-                $settings = [];
-            } else {
-                $moduleclass = $key;
-                $settings = $value;
-            }
-
-            $this->modules[$moduleclass] = $this->initializeModule($moduleclass, $settings, $hookmanager);
-        }
-    }
-
-    private function initializeModule($moduleclass, array $settings, HookManager $hookmanager)
-    {
-        $instance = new $moduleclass;
-        $instance->init($this->getWpBridge(), $settings, $hookmanager);
-        $instance->setTheme($this);
-
-        return $instance;
-    }
-
     /**
-     */
-    final public function addThemeLangSupport()
-    {
-        $this->getWpBridge()->loadThemeTextdomain(
-            $this->textdomain,
-            $this->getWpBridge()->getTemplateDirectory() . '/languages'
-        );
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    final public function addToContext(array $data)
-    {
-        return array_merge(
-            $data,
-            $this->getMenuInstances(),
-            $this->getModulesContext(),
-            $this->getThemeContext()
-        );
-    }
-
-    /**
-     * @return array
-     */
-    private function getModulesContext()
-    {
-        $context = [];
-        foreach ($this->modules as $module) {
-            $context = array_merge($module->getContext(), $context);
-        }
-        return $context;
-    }
-
-    /**
-     * @return array Menu instances to be passed to the view context.
+     * @return array menu instances to be passed to the view context
      */
     final protected function getMenuInstances()
     {
         $ret = [];
         foreach ($this->menus as $slug => $name) {
-            $ret['menu_' . $slug] = $this->getMenuFactory()->create($slug);
+            $ret['menu_'.$slug] = $this->getMenuFactory()->create($slug);
         }
+
         return $ret;
     }
 
     /**
      * Register a WP image size.
-     * @param string $name
-     * @param integer $width
-     * @param integer $height
-     * @param boolean|array $crop
+     *
+     * @param string     $name
+     * @param int        $width
+     * @param int        $height
+     * @param array|bool $crop
      */
     final protected function addImageSize($name, $width, $height, $crop = false)
     {
@@ -224,20 +252,6 @@ abstract class AbstractTheme
     }
 
     /**
-     * Creates a controller (typically from a WP theme PHP file).
-     *
-     * @param string $classname
-     * @return \Gwa\Wordpress\Zero\Controller\AbstractController
-     */
-    public function createController($classname)
-    {
-        return (new $classname())
-            ->setTheme($this)
-            ->setTimberBridge($this->getTimberBridge())
-            ->setWpBridge($this->getWpBridge());
-    }
-
-    /**
      * @return HookManager
      */
     final protected function getHookManager()
@@ -245,50 +259,40 @@ abstract class AbstractTheme
         return $this->hookmanager;
     }
 
-    /**
-     * @return MenuFactoryContract
-     */
-    final public function getMenuFactory()
+    private function registerModules(array $moduleclasses, HookManager $hookmanager)
     {
-        if (!isset($this->menufactory)) {
-            $this->menufactory = new TimberMenuFactory;
+        foreach ($moduleclasses as $key => $value) {
+            if (is_numeric($key)) {
+                $moduleclass = $value;
+                $settings = [];
+            } else {
+                $moduleclass = $key;
+                $settings = $value;
+            }
+
+            $this->modules[$moduleclass] = $this->initializeModule($moduleclass, $settings, $hookmanager);
+        }
+    }
+
+    private function initializeModule($moduleclass, array $settings, HookManager $hookmanager)
+    {
+        $instance = new $moduleclass();
+        $instance->init($this->getWpBridge(), $settings, $hookmanager);
+        $instance->setTheme($this);
+
+        return $instance;
+    }
+
+    /**
+     * @return array
+     */
+    private function getModulesContext()
+    {
+        $context = [];
+        foreach ($this->modules as $module) {
+            $context = array_merge($module->getContext(), $context);
         }
 
-        return $this->menufactory;
-    }
-
-    /**
-     * @param MenuFactoryContract $factory
-     */
-    final public function setMenuFactory(MenuFactoryContract $factory)
-    {
-        $this->menufactory = $factory;
-    }
-
-    /**
-     * @return string
-     */
-    final public function getEnvironment()
-    {
-        return $this->environment;
-    }
-
-    /**
-     * @return string|null
-     */
-    final public function getTextDomain()
-    {
-        return $this->textdomain;
-    }
-
-    /**
-     * Convenience method to allow modules and controllers to get translated text from the theme text domain.
-     *
-     * @param string $text
-     * @return string
-     */
-    final public function __($text)
-    {
-        return $this->getWpBridge()->__($text, $this->getTextDomain());
+        return $context;
     }
 }
