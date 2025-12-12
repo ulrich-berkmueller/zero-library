@@ -3,10 +3,12 @@ namespace Gwa\Wordpress\Zero\Test\Controller;
 
 use Gwa\Wordpress\Zero\Timber\MockeryTimberBridge;
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class AbstractControllerTest extends MockeryTestCase
+class AbstractControllerTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
     public function testConstruct(): void
     {
         $controller = new MyController;

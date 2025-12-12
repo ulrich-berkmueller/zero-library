@@ -3,10 +3,12 @@ namespace Gwa\Wordpress\Zero\Test\Theme;
 
 use Gwa\Wordpress\Zero\Theme\MenuFactory\MockMenuFactory;
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class AbstractThemeTest extends MockeryTestCase
+class AbstractThemeTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
     private $bridge;
     private $instance;
 

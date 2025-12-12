@@ -3,10 +3,12 @@ namespace Gwa\Wordpress\Zero\Test\Module;
 
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
 use Gwa\Wordpress\Zero\Theme\HookManager;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class AbstractModuleTest extends MockeryTestCase
+class AbstractModuleTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
     private $bridge;
     private $hookmanager;
     private $instance;

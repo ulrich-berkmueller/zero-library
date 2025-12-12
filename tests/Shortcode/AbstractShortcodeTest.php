@@ -2,10 +2,12 @@
 namespace Gwa\Wordpress\Zero\Test\Shortcode;
 
 use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class AbstractShortcodeTest extends MockeryTestCase
+class AbstractShortcodeTest extends TestCase
 {
+    use MockeryPHPUnitIntegration;
     public function testConstruct(): void
     {
         $bridge = new MockeryWpBridge;
