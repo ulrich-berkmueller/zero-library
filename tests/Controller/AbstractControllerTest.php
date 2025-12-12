@@ -30,12 +30,14 @@ class AbstractControllerTest extends MockeryTestCase
         $bridge->mock()
             ->shouldReceive('getPost')
             ->with(false, \Timber\Post::class)
+            ->andReturn(['dummy-post'])
             ->mock();
 
         $controller = new MyController;
         $controller->setTimberBridge($bridge);
 
         $post = $controller->getPost();
+        $this->assertSame(['dummy-post'], $post);
     }
 
     public function testGetPostForArgs(): void
@@ -44,12 +46,14 @@ class AbstractControllerTest extends MockeryTestCase
         $bridge->mock()
             ->shouldReceive('getPost')
             ->with(['foo' => 'bar'], '\MyPostClass')
+            ->andReturn(['dummy-post'])
             ->mock();
 
         $controller = new MyController;
         $controller->setTimberBridge($bridge);
 
         $post = $controller->getPostForArgs(['foo' => 'bar'], '\MyPostClass');
+        $this->assertSame(['dummy-post'], $post);
     }
 
     public function testGetPosts(): void
@@ -58,12 +62,15 @@ class AbstractControllerTest extends MockeryTestCase
         $bridge->mock()
             ->shouldReceive('getPosts')
             ->with(false, \Timber\Post::class, false)
+            ->andReturn(['p1', 'p2'])
+            ->once()
             ->mock();
 
-        $controller = new MyController;
+        $controller = new MyController();
         $controller->setTimberBridge($bridge);
 
-        $post = $controller->getPosts();
+        $posts = $controller->getPosts();
+        $this->assertSame(['p1', 'p2'], $posts);
     }
 
     public function testGetPostsForArgs(): void
@@ -72,12 +79,14 @@ class AbstractControllerTest extends MockeryTestCase
         $bridge->mock()
             ->shouldReceive('getPosts')
             ->with(['foo' => 'bar'], '\MyPostClass', 'collection')
+            ->andReturn(['p1'])
             ->mock();
 
-        $controller = new MyController;
+        $controller = new MyController();
         $controller->setTimberBridge($bridge);
 
-        $post = $controller->getPostsForArgs(['foo' => 'bar'], '\MyPostClass', 'collection');
+        $posts = $controller->getPostsForArgs(['foo' => 'bar'], '\MyPostClass', 'collection');
+        $this->assertSame(['p1'], $posts);
     }
 
     public function testRender(): void
@@ -100,5 +109,6 @@ class AbstractControllerTest extends MockeryTestCase
         $controller->setWpBridge($MockBridge);
 
         $controller->render();
+        $this->addToAssertionCount(1);
     }
 }
