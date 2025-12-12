@@ -4,15 +4,14 @@
     "description": "A WordPress development framework.",
     "keywords"   : ["roots", "wordpress", "composer", "wp", "twig", "zero", "library", "zero-library"],
     "license"    : "MIT",
-    "homepage"   : "https://github.com/gwa/zero-library",
-    "support"    : {
-        "issues": "https://github.com/gwa/zero-library/issues",
-        "source": "https://github.com/gwa/zero-library"
-    },
+    "homepage"   : "https://github.com/ulrich-berkmueller/zero-library",
     "authors"    : [
         {
           "name"    : "Great White Ark",
           "homepage": "http://www.greatwhiteark.com"
+        },
+        {
+            "name"    : "Ulrich Berkmueller, Ideal Bytes"
         }
     ],
     "require": {
