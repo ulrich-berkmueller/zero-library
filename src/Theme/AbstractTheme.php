@@ -44,6 +44,11 @@ abstract class AbstractTheme
     private $hookmanager;
 
     /**
+     * @var MenuFactoryContract $menufactory
+     */
+    private $menufactory;
+
+    /**
      * @param string $environment
      */
     final public function __construct($environment = 'production')
