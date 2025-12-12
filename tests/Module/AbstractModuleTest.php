@@ -1,7 +1,7 @@
 <?php
 namespace Gwa\Wordpress\Zero\Test\Module;
 
-use Gwa\Wordpress\WpBridge\MockeryWpBridge;
+use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
 use Gwa\Wordpress\Zero\Theme\HookManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 

@@ -2,7 +2,7 @@
 namespace Gwa\Wordpress\Zero\Test\Controller;
 
 use Gwa\Wordpress\Zero\Timber\MockeryTimberBridge;
-use Gwa\Wordpress\WpBridge\MockeryWpBridge;
+use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class AbstractControllerTest extends MockeryTestCase

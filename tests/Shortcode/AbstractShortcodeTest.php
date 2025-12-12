@@ -1,10 +1,10 @@
 <?php
 namespace Gwa\Wordpress\Zero\Test\Shortcode;
 
-use Gwa\Wordpress\WpBridge\MockeryWpBridge;
+use Gwa\Wordpress\Zero\Test\WpBridge\MockeryWpBridge;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AbstractModuleTest extends MockeryTestCase
+class AbstractShortcodeTest extends MockeryTestCase
 {
     public function testConstruct(): void
     {

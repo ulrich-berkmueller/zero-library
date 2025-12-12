@@ -1,8 +1,8 @@
 <?php
 namespace Gwa\Wordpress\Zero\Controller;
 
-use Gwa\Wordpress\WpBridge\Contracts\WpBridgeAwareInterface;
-use Gwa\Wordpress\WpBridge\Traits\WpBridgeTrait;
+use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeAwareInterface;
+use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 use Gwa\Wordpress\Zero\Theme\AbstractTheme;
 use Gwa\Wordpress\Zero\Timber\Traits\TimberBridgeTrait;
 use Gwa\Wordpress\Zero\Traits\HasTheme;

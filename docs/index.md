@@ -26,7 +26,7 @@ The `functions.php` initializes the theme.
 
 ```php
 <?php
-use Gwa\Wordpress\WpBridge\WpBridge;
+use Gwa\Wordpress\Zero\WpBridge\WpBridge;
 use MyThemeNamespace\CustomTheme;
 
 // Create and initialize the theme

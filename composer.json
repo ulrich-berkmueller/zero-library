@@ -15,23 +15,17 @@
           "homepage": "http://www.greatwhiteark.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:ulrich-berkmueller/WpBridge.git"
-        }
-    ],
     "require": {
         "php"                                  : ">=7.4",
         "composer/installers"                  : "^1.0",
         "jjgrainger/wp-custom-post-type-class" : "^1.4",
         "timber/timber"                        : "^1.19",
         "cmb2/cmb2"                            : "^2.10",
-        "gwa/wp-bridge"                        : "dev-fix-php-8.1-compatiblity",
         "roots/soil"                           : "^4.0"
     },
     "require-dev": {
         "phpunit/phpunit"                      : "^9.5",
+        "mockery/mockery"                      : "^1.6",
         "friendsofphp/php-cs-fixer"            : "^3.8"
     },
     "autoload": {
@@ -49,7 +43,6 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-fix-php-8.1-compatiblity": "5.1.x-dev"
         }
     },
     "minimum-stability"                        : "dev",

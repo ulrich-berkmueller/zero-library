@@ -1,8 +1,8 @@
 <?php
 namespace Gwa\Wordpress\Zero\Shortcode;
 
-use Gwa\Wordpress\WpBridge\Contracts\WpBridgeInterface;
-use Gwa\Wordpress\WpBridge\Traits\WpBridgeTrait;
+use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeInterface;
+use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 
 /**

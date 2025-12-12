@@ -1,7 +1,7 @@
 <?php
 namespace Gwa\Wordpress\Zero\Module;
 
-use Gwa\Wordpress\WpBridge\Traits\WpBridgeTrait;
+use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 use Gwa\Wordpress\Zero\Module\AbstractThemeModule;
 
 class IdColumnsModule extends AbstractThemeModule
