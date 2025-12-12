@@ -1,7 +1,7 @@
 {
     "name"       : "gwa/zero-library",
     "type"       : "library",
-    "description": "Php Library for zero template.",
+    "description": "A WordPress development framework.",
     "keywords"   : ["roots", "wordpress", "composer", "wp", "twig", "zero", "library", "zero-library"],
     "license"    : "MIT",
     "homepage"   : "https://github.com/gwa/zero-library",
@@ -15,47 +15,48 @@
           "homepage": "http://www.greatwhiteark.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:ulrich-berkmueller/WpBridge.git"
+        }
+    ],
     "require": {
-        "php"                                                  : ">=5.4.0",
-        "jjgrainger/wp-custom-post-type-class"                 : "~1.4",
-        "jarednova/timber"                                     : "~0.22",
-        "webdevstudios/cmb2"                                   : "~2.1.2",
-        "gwa/mockery-wp-bridge"                                : "~1.2",
-        "roots/soil"                                           : "~3.4.0"
+        "php"                                  : ">=7.4",
+        "composer/installers"                  : "^1.0",
+        "jjgrainger/wp-custom-post-type-class" : "^1.4",
+        "timber/timber"                        : "^1.19",
+        "cmb2/cmb2"                            : "^2.10",
+        "gwa/wp-bridge"                        : "dev-fix-php-8.1-compatiblity",
+        "roots/soil"                           : "^4.0"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer"                                  : "~1.10",
-        "phpunit/phpunit"                                      : "~4.8",
-        "scrutinizer/ocular"                                   : "~1.1"
+        "phpunit/phpunit"                      : "^9.5",
+        "friendsofphp/php-cs-fixer"            : "^3.8"
     },
     "autoload": {
         "psr-4": {
-            "Gwa\\Wordpress\\Template\\Zero\\Library\\"        : "src/"
+            "Gwa\\Wordpress\\Zero\\"           : "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Gwa\\Wordpress\\Template\\Zero\\Library\\Tests\\" : "tests/"
+            "Gwa\\Wordpress\\Zero\\Test\\"     : "tests/"
         },
         "classmap": [
             "wp-content/plugins/soil"
         ]
     },
-    "repositories": [{
-        "type": "composer",
-        "url" : "http://wpackagist.org"
-    }],
     "extra": {
-        "installer-name": "zero-library",
         "branch-alias": {
-            "dev-master"                                       : "3.3.0-dev"
+            "dev-fix-php-8.1-compatiblity": "5.1.x-dev"
         }
     },
-    "scripts": {
-        "test"                                                 : "phpunit",
-        "check-cs"                                             : "php-cs-fixer.phar fix -v --dry-run",
-        "fix-cs"                                               : "php-cs-fixer.phar fix"
-    },
-    "minimum-stability"                                        : "dev",
-    "prefer-stable"                                            : true
+    "minimum-stability"                        : "dev",
+    "prefer-stable"                            : true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
 }
