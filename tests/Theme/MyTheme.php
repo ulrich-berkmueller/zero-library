@@ -35,10 +35,10 @@ class MyTheme extends AbstractTheme
         $classes = parent::getModuleClasses();
 
         // module without settings
-        $classes[] = 'Gwa\Wordpress\Zero\Test\Module\MyModule';
+        $classes[] = \Gwa\Wordpress\Zero\Test\Module\MyModule::class;
 
         // module with settings
-        $classes['Gwa\Wordpress\Zero\Test\Module\BasicModule'] = ['foo' => 'bar'];
+        $classes[\Gwa\Wordpress\Zero\Test\Module\BasicModule::class] = ['foo' => 'bar'];
 
         return $classes;
     }
