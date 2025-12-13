@@ -3,6 +3,7 @@
 namespace Gwa\Wordpress\Zero\WpBridge\Traits;
 
 use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeInterface;
+use Gwa\Wordpress\Zero\WpBridge\WpBridge;
 
 /**
  * Trait to be used by all classes that use WpBridge.
@@ -29,10 +30,10 @@ trait WpBridgeTrait
     /**
      * Get WpBridge.
      *
-     * @return WpBridge
+     * @return WpBridgeInterface
      */
     public function getWpBridge()
     {
-        return $this->wpbridge;
+        return $this->wpbridge ?? WpBridge::instance();
     }
 }

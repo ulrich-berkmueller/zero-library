@@ -47,7 +47,7 @@ class AbstractThemeTest extends TestCase
 
         $filters = $bridge->getAddedFilters();
 
-        $this->assertEquals('timber_context', $filters[0]->filtername);
+        $this->assertEquals('timber/context', $filters[0]->filtername);
         $this->assertEquals('pre_option_blog_public', $filters[1]->filtername);
     }
 

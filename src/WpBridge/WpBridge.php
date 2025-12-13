@@ -39,4 +39,16 @@ class WpBridge implements WpBridgeInterface
     {
         return strtolower(preg_replace('/([a-z])([A-Z0-9])/', '$1_$2', $string));
     }
+
+
+    // FIXME: Currently we can't get a WpBridge in all cases after Timber API has changed with regard to
+    //  custom post classes and the missing filter to add the WpBridge  to WpBridgeAware classes.
+    private static ?WpBridge $_instance = null;
+    public static function instance(): WpBridgeInterface
+    {
+        if (null === static::$_instance) {
+            static::$_instance = new static();
+        }
+        return static::$_instance;
+    }
 }

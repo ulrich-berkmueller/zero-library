@@ -84,7 +84,7 @@ abstract class AbstractTheme
         $this->doInit();
         $this->registerModules($this->getModuleClasses(), $this->hookmanager);
 
-        $this->getHookManager()->addFilter('timber_context', $this, 'addToContext');
+        $this->getHookManager()->addFilter('timber/context', $this, 'addToContext');
 
         // Add language support if textdomain is set
         if (isset($this->textdomain)) {
@@ -219,7 +219,11 @@ abstract class AbstractTheme
     {
         $ret = [];
         foreach ($this->menus as $slug => $name) {
-            $ret['menu_'.$slug] = $this->getMenuFactory()->create($slug);
+
+            $menu = $this->getMenuFactory()->create($slug);
+            if ($menu instanceof \Timber\Menu) {
+                $ret['menu_'.$slug] = $menu;
+            }
         }
 
         return $ret;

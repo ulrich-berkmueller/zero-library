@@ -3,18 +3,17 @@
 namespace Gwa\Wordpress\Zero\Theme\MenuFactory;
 
 use Timber\Menu;
+use Timber\Timber;
 
 class TimberMenuFactory implements MenuFactoryContract
 {
     /**
      * @param string $slug
      *
-     * @return TimberMenu
-     *
-     * @codeCoverageIgnore
+     * @return null|Menu
      */
     public function create($slug)
     {
-        return new Menu($slug);
+        return Timber::get_menu($slug);
     }
 }

@@ -8,6 +8,7 @@ use Gwa\Wordpress\Zero\WpBridge\Contracts\WpBridgeAwareInterface;
 use Gwa\Wordpress\Zero\WpBridge\Traits\WpBridgeTrait;
 use Timber\Loader;
 use Timber\Post;
+use Timber\Timber;
 
 abstract class AbstractController
 {
@@ -84,57 +85,63 @@ abstract class AbstractController
     abstract public function getTemplates();
 
     /**
-     * @param string $postClass
-     *
-     * @return null|array|bool
+     * @return null|bool|\Timber\Post
      */
-    public function getPost($postClass = Post::class)
+    public function getPost()
     {
-        return $this->getPostForArgs(false, $postClass);
+        $post = $this->getTimberBridge()->getPost(); // Timber::get_post(...)
+        $this->addWpBridgeToPost($post);
+        return $post;
     }
 
     /**
      * @param string[] $args
-     * @param string   $postClass
      *
-     * @return null|array|bool
+     * @return null|bool|\Timber\Post
      */
-    public function getPostForArgs($args, $postClass = Post::class)
+    public function getPostForArgs($args)
     {
-        return $this->getTimberBridge()->getPost($args, $postClass);
+        $post = $this->getTimberBridge()->getPost($args); // Timber::get_post(...)
+        $this->addWpBridgeToPost($post);
+        return $post;
     }
 
     /**
-     * @param string $postClass
      * @param bool   $collection
      *
-     * @return null|array|bool
+     * @return null|bool|array
      */
-    public function getPosts($postClass = Post::class, $collection = false)
+    public function getPosts()
     {
-        return $this->getPostsForArgs(false, $postClass, $collection);
+        $options = [];
+        $posts = $this->getTimberBridge()->getPosts(false, $options); // Timber::get_posts(...)
+        $this->addWpBridgeToPosts($posts);
+        return $posts;
     }
 
     /**
      * @param string[] $args
-     * @param string   $postClass
      * @param bool     $collection
      *
-     * @return null|array|bool
+     * @return null|bool|array
      */
-    public function getPostsForArgs($args, $postClass = Post::class, $collection = false)
+    public function getPostsForArgs($args)
     {
-        return $this->getTimberBridge()->getPosts($args, $postClass, $collection);
+        $options = [];
+        $posts = $this->getTimberBridge()->getPosts($args, $options); // Timber::get_posts(...)
+        $this->addWpBridgeToPosts($posts);
+        return $posts;
     }
 
     /**
      *  Render template.
      *
-     * @return null|bool|string
+     * @return void|null|bool|string
      */
     public function render()
     {
-        $this->getWpBridge()->addFilter('timber_post_getter_get_posts', [$this, 'addWpBridgeToPosts'], 10, 3);
+        // FIXME: no hook anymore to automatically inject wp bridge
+        // $this->getWpBridge()->addFilter('timber_post_getter_get_posts', [$this, 'addWpBridgeToPosts'], 10, 3);
 
         $context = $this->getContext();
         $templates = $this->getTemplates();
@@ -150,14 +157,22 @@ abstract class AbstractController
         );
     }
 
-    public function addWpBridgeToPosts($posts)
+
+    public function addWpBridgeToPost($post)
     {
-        foreach ($posts as $key => $post) {
+        if ($post instanceof WpBridgeAwareInterface) {
+            $post->setWpBridge($this->getWpBridge());
+        }
+        return $post;
+    }
+
+    public function addWpBridgeToPosts(iterable $posts)
+    {
+        foreach ($posts as $post) {
             if ($post instanceof WpBridgeAwareInterface) {
-                $posts[$key] = $post->setWpBridge($this->getWpBridge());
+                $post->setWpBridge($this->getWpBridge());
             }
         }
-
         return $posts;
     }
 

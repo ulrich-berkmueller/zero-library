@@ -34,11 +34,13 @@ class AbstractControllerTest extends TestCase
 
     public function testGetPost(): void
     {
+        $obj = new \stdClass();
+
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPost')
-            ->with(false, Post::class)
-            ->andReturn(['dummy-post'])
+            ->with()
+            ->andReturn($obj)
             ->mock()
         ;
 
@@ -46,34 +48,38 @@ class AbstractControllerTest extends TestCase
         $controller->setTimberBridge($bridge);
 
         $post = $controller->getPost();
-        $this->assertSame(['dummy-post'], $post);
+        $this->assertSame($obj, $post);
     }
 
     public function testGetPostForArgs(): void
     {
+        $obj = new \stdClass();
+
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPost')
-            ->with(['foo' => 'bar'], '\MyPostClass')
-            ->andReturn(['dummy-post'])
+            ->with(['foo' => 'bar'])
+            ->andReturn($obj)
             ->mock()
         ;
 
         $controller = new MyController();
         $controller->setTimberBridge($bridge);
 
-        $post = $controller->getPostForArgs(['foo' => 'bar'], '\MyPostClass');
-        $this->assertSame(['dummy-post'], $post);
+        $post = $controller->getPostForArgs(['foo' => 'bar']);
+        $this->assertSame($obj, $post);
     }
 
     public function testGetPosts(): void
     {
+        $obj1 = new \stdClass();
+        $obj2 = new \stdClass();
+
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPosts')
-            ->with(false, Post::class, false)
-            ->andReturn(['p1', 'p2'])
-            ->once()
+            ->with(false, [], false)
+            ->andReturn([$obj1, $obj2])
             ->mock()
         ;
 
@@ -81,24 +87,26 @@ class AbstractControllerTest extends TestCase
         $controller->setTimberBridge($bridge);
 
         $posts = $controller->getPosts();
-        $this->assertSame(['p1', 'p2'], $posts);
+        $this->assertSame([$obj1, $obj2], $posts);
     }
 
     public function testGetPostsForArgs(): void
     {
+        $obj1 = new \stdClass();
+
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPosts')
-            ->with(['foo' => 'bar'], '\MyPostClass', 'collection')
-            ->andReturn(['p1'])
+            ->with(['foo' => 'bar'], [], false)
+            ->andReturn([$obj1])
             ->mock()
         ;
 
         $controller = new MyController();
         $controller->setTimberBridge($bridge);
 
-        $posts = $controller->getPostsForArgs(['foo' => 'bar'], '\MyPostClass', 'collection');
-        $this->assertSame(['p1'], $posts);
+        $posts = $controller->getPostsForArgs(['foo' => 'bar']);
+        $this->assertSame([$obj1], $posts);
     }
 
     public function testRender(): void
