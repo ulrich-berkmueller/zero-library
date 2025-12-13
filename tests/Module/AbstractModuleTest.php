@@ -9,8 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
 class AbstractModuleTest extends TestCase
 {

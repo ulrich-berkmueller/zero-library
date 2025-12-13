@@ -9,8 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
- *
- * @coversNothing
  */
 class AbstractThemeTest extends TestCase
 {

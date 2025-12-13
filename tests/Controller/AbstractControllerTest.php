@@ -10,8 +10,6 @@ use Timber\Post;
 
 /**
  * @internal
- *
- * @coversNothing
  */
 class AbstractControllerTest extends TestCase
 {
