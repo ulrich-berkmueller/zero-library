@@ -160,6 +160,9 @@ abstract class AbstractController
 
     public function addWpBridgeToPost($post)
     {
+        if ($post instanceof Post) {
+            $post->setup();
+        }
         if ($post instanceof WpBridgeAwareInterface) {
             $post->setWpBridge($this->getWpBridge());
         }
@@ -169,6 +172,9 @@ abstract class AbstractController
     public function addWpBridgeToPosts(iterable $posts)
     {
         foreach ($posts as $post) {
+            if ($post instanceof Post) {
+                $post->setup();
+            }
             if ($post instanceof WpBridgeAwareInterface) {
                 $post->setWpBridge($this->getWpBridge());
             }

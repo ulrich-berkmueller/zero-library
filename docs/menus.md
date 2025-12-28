@@ -13,4 +13,4 @@ protected function doInit()
 }
 ```
 
-A TimberMenu instance will be available in the View context as `menu_header`.
+A `Timber\Menu` instance will be available in the View context as `menu_header`.
