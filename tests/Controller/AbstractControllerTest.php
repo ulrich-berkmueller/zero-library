@@ -78,7 +78,7 @@ class AbstractControllerTest extends TestCase
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPosts')
-            ->with(false, [], false)
+            ->with(false, [])
             ->andReturn([$obj1, $obj2])
             ->mock()
         ;
@@ -97,7 +97,7 @@ class AbstractControllerTest extends TestCase
         $bridge = new MockeryTimberBridge();
         $bridge->mock()
             ->shouldReceive('getPosts')
-            ->with(['foo' => 'bar'], [], false)
+            ->with(['foo' => 'bar'], [])
             ->andReturn([$obj1])
             ->mock()
         ;
