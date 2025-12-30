@@ -3,6 +3,8 @@
 namespace Gwa\Wordpress\Zero\Post;
 
 use Gwa\Wordpress\Zero\Traits\AddCustomControl;
+use PostTypes\PostType;
+use PostTypes\Taxonomy;
 
 abstract class AbstractCustomPostType
 {
@@ -23,16 +25,22 @@ abstract class AbstractCustomPostType
         $post = $this->createPostType();
 
         if ($settings = $this->getTaxonomySettings()) {
-            $post->register_taxonomy($settings);
+            if (is_array($settings) && isset($settings['name'])) {
+                $taxonomy = $this->createTaxonomy($settings);
+                $taxonomy->posttype($this->getPostType());
+                $taxonomy->register();
+            }
         }
 
         $this->addExtra();
+
+        $post->register();
     }
 
     /**
-     * @return \CPT
+     * @return PostType
      */
-    public function createPostType()
+    protected function createPostType()
     {
         $options = array_merge(
             [
@@ -41,20 +49,37 @@ abstract class AbstractCustomPostType
             $this->getOptions()
         );
 
-        $post = new \CPT(
-            [
-                'post_type_name' => $this->getPostType(),
-                'singular' => $this->getSingular(),
-                'plural' => $this->getPlural(),
-                'slug' => $this->getSlug(),
-            ],
-            $options
-        );
+        $names = [
+            'name'     => $this->getPostType(),
+            'singular' => $this->getSingular(),
+            'plural'   => $this->getPlural(),
+            'slug'     => $this->getSlug(),
+        ];
 
-        $post->menu_icon($this->getIcon());
-        $post->set_textdomain($this->getTextDomain());
+        $post = new PostType($names, $options);
+
+        $post->icon($this->getIcon());
 
         return $post;
+    }
+
+    /**
+     * @return Taxonomy
+     */
+    protected function createTaxonomy(array $settings)
+    {
+        $names = [
+            'name'     => $settings['name'],
+            'singular' => $settings['singular'] ?? $settings['name'],
+            'plural'   => $settings['plural'] ?? $settings['name'],
+            'slug'     => $settings['slug'] ?? $settings['name'],
+        ];
+        $options = $settings['options'] ?? [];
+        $labels = $settings['labels'] ?? [];
+
+        $taxonomy = new Taxonomy($names, $options, $labels);
+
+        return $taxonomy;
     }
 
     // -------- ABSTRACT METHODS --------
