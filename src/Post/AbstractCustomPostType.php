@@ -28,6 +28,7 @@ abstract class AbstractCustomPostType
             if (is_array($settings) && isset($settings['name'])) {
                 $taxonomy = $this->createTaxonomy($settings);
                 $taxonomy->posttype($this->getPostType());
+                $post->taxonomy($taxonomy->name);
                 $taxonomy->register();
             }
         }
